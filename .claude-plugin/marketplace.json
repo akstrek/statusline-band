@@ -1,6 +1,6 @@
 {
-  "name": "ctx-band",
+  "name": "statusline-band",
   "description": "A band above the Claude Code prompt showing the working directory, the model and the context window's fill.",
   "owner": { "name": "Amritanshu Singh" },
-  "plugins": [{ "name": "ctx-band", "source": "./" }]
+  "plugins": [{ "name": "statusline-band", "source": "./" }]
 }

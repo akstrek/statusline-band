@@ -21,7 +21,7 @@ let readAt = 0
 
 /** Says what went wrong on the status line, which persists on every surface. */
 function warn($: EngineInterface, line: string) {
-  $.ui.status(`ctx-band: ${line}`)
+  $.ui.status(`statusline-band: ${line}`)
 }
 
 /** The cwd, model and context fill, re-read at most every TTL milliseconds. */

@@ -1,4 +1,4 @@
-# ctx-band
+# statusline-band
 
 A Claude Code mod that draws one row above the prompt: the working directory, the
 model, and how full the context window is.
@@ -16,7 +16,7 @@ An unread context window draws `--%`.
 At the prompt of a terminal session:
 
 ```
-/plugin install ctx-band --marketplace akstrek/ctx-band
+/plugin install statusline-band --marketplace akstrek/statusline-band
 ```
 
 Answer `y` to add the marketplace, then press Enter to take the user scope.
@@ -24,11 +24,11 @@ Answer `y` to add the marketplace, then press Enter to take the user scope.
 From a shell:
 
 ```
-claude plugin install ctx-band --marketplace akstrek/ctx-band
+claude plugin install statusline-band --marketplace akstrek/statusline-band
 ```
 
 In the desktop app, where `/plugin` does not run: click + next to the prompt box,
-then Plugins, Add marketplace with `akstrek/ctx-band`, then Add plugin.
+then Plugins, Add marketplace with `akstrek/statusline-band`, then Add plugin.
 
 ## What to expect
 

@@ -2,9 +2,9 @@ import { expect, mock, test } from 'claude-code/testing'
 import type { On } from 'claude-code'
 
 const BAND = {
-  plugin: 'ctx-band',
+  plugin: 'statusline-band',
   component: 'AbovePrompt',
-  requestId: 'ctx-band',
+  requestId: 'statusline-band',
   props: {
     hasSurvey: false,
     isWorking: false,

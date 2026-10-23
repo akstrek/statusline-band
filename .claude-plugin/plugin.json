@@ -4,5 +4,6 @@
   "description": "Shows the working directory, the model and the context window's fill in a band above the prompt.",
   "author": {
     "name": "Amritanshu Singh"
-  }
+  },
+  "license": "MIT"
 }

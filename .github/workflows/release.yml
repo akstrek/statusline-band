@@ -1,0 +1,64 @@
+name: release
+
+# The directory and `claude plugin update` both key off the version in
+# plugin.json, so a push that changes it should leave a matching tag behind.
+# This checks the manifests agree and tags the release when the version moves.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check the manifests agree
+        run: |
+          node --input-type=module -e '
+            import { readFileSync } from "node:fs";
+
+            const plugin = JSON.parse(readFileSync(".claude-plugin/plugin.json", "utf8"));
+            const market = JSON.parse(readFileSync(".claude-plugin/marketplace.json", "utf8"));
+            const hooks = JSON.parse(readFileSync("hooks/hooks.json", "utf8"));
+
+            const fail = (m) => { console.error("::error::" + m); process.exitCode = 1; };
+
+            if (!/^[a-z0-9-]{1,64}$/.test(plugin.name)) {
+              fail(`plugin.json name "${plugin.name}" is not lowercase letters, digits and hyphens`);
+            }
+            if (!market.plugins?.some((p) => p.name === plugin.name)) {
+              fail(`marketplace.json lists no plugin named "${plugin.name}"`);
+            }
+            if (!plugin.version) fail("plugin.json has no version");
+            if (!plugin.license) fail("plugin.json has no license: the directory refuses a submission without one");
+            if (!hooks.modules?.length) fail("hooks.json lists no modules");
+
+            console.log(`${plugin.name} v${plugin.version}: manifests agree`);
+          '
+
+      - name: Tag the release when the version moves
+        if: github.event_name == 'push'
+        run: |
+          VERSION=$(node -p "require('./.claude-plugin/plugin.json').version")
+          NAME=$(node -p "require('./.claude-plugin/plugin.json').name")
+          TAG="${NAME}--v${VERSION}"
+
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "${TAG} already exists, nothing to tag"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG}" -m "${NAME} v${VERSION}"
+          git push origin "refs/tags/${TAG}"
+          echo "tagged ${TAG}"
